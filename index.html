@@ -1,0 +1,112 @@
+<!--
+    HUSK! Fjern kommentarer fra minify!
+    Generer qr-kode f.eks. her: https://www.the-qrcode-generator.com/
+-->
+
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Kan du stjæle diamanten?</h1>
+    <p>Du vinder når diamanten ikke befinder sig i montren længere og baggrunden på siden bliver grøn :D</p>
+    <p>Du taber hvis alarmen går i gang! (rød baggrund på siden, spil genstarter efter 2 sek)</p>
+    <p>Regler:</p>
+    <ul>
+        <li>Det er tilladt at indtaste kommandoer i konsollen i browseren.</li>
+        <li>Det er tilladt at undersøge kildekoden (også med en JavaScript beautifier).</li>
+        <li>Det er IKKE tilladt at ændre i kildekoden.</li>
+    </ul>
+    <p>Når du har stjålet diamanten, gem meget gerne en log af konsollen og send den til mig :D</p>
+
+    <svg width="300" height="300">
+        <ellipse cx="150" cy="150" rx="150" ry="150" style="fill:#00d9ff" />
+        <rect width="300" height="150" y="150" style="fill:#00d9ff" />
+        <polygon id="dm" points="50,140 100,100 200,100 250,140 150,250"
+            style="fill:lime;stroke:purple;stroke-width:5;" />
+    </svg>
+
+    <script>
+        let dm = document.getElementById("dm");
+        let ks = [];
+        let ts1 = [];
+        let ts2 = [];
+        let t1 = 0;
+
+        function ck(k) {
+            if (k == ks[k])
+                return k + 10;
+            else if (k > ks[k])
+                return k - 5;
+            else if (k < ks[k])
+                return k + 8;
+            else
+                return k - 3;
+        }
+
+        setInterval(function () {
+            let vi = document.getElementById("dm").style.visibility;
+            let ss = true;
+            let al = false;
+
+            t1++;
+            if (t1 > 1000)
+                t1 = 0;
+
+            for (i = 0; i < ts1.length; i++)
+                if (ts1[i] != ts2[i])
+                    al = true;
+
+            /*
+                Nøgle 1:
+                Sæt ks[0] = 0 imens t1 er <= 500.
+            */
+            if (ck(0) < 0)
+                ss = false;
+            else if (ts1[0] === undefined) {
+                ts1[0] = t1;
+                ts2[0] = t1;
+            }
+            if (ts1[0] > 500)
+                al = true;
+
+            /*
+                Nøgle 2:
+                Sæt ks[-3] > -3, sæt ks[2] < 2
+            */
+            if (ck(ck(2)) != 5)
+                ss = false;
+            if (ck(ck(2)) == -6)
+                al = true;
+            if (ck(ck(2)) == 7)
+                al = true;
+            if (ks[10] < 10)
+                al = true;
+
+            /*
+                Nøgle 3:
+            */
+
+            /*
+                Nøgle 4:
+            */
+
+            /*
+                Nøgle 5:
+            */
+
+            if (!ss && vi !== "")
+                al = true;
+
+            if (al) {
+                document.body.style.backgroundColor = "#ff0000";
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+            else if (ss && (vi === "hidden" || vi === "collapse"))
+                document.body.style.backgroundColor = "#00ff00";
+        }, 1000 / 60);
+    </script>
+</body>
+
+</html>
