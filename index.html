@@ -1,36 +1,41 @@
-<!--
-    HUSK! Fjern kommentarer fra minify!
-    Generer qr-kode f.eks. her: https://www.the-qrcode-generator.com/
--->
-
 <!DOCTYPE html>
 <html>
 
 <body>
     <h1>Kan du stjæle diamanten?</h1>
-    <p>Du vinder når diamanten ikke befinder sig i montren længere og baggrunden på siden bliver grøn :D</p>
-    <p>Du taber hvis alarmen går i gang! (rød baggrund på siden, spil genstarter efter 2 sek)</p>
+    <p>Du vinder når diamanten er fjernet fra montren og baggrunden på siden bliver grøn :D</p>
+    <p>Du taber hvis alarmen går i gang!</p>
     <p>Regler:</p>
     <ul>
         <li>Det er tilladt at indtaste kommandoer i konsollen i browseren.</li>
-        <li>Det er tilladt at undersøge kildekoden (også med en JavaScript beautifier).</li>
+        <li>Det er tilladt at undersøge kildekoden.</li>
         <li>Det er IKKE tilladt at ændre i kildekoden.</li>
     </ul>
     <p>Når du har stjålet diamanten, gem meget gerne en log af konsollen og send den til mig :D</p>
 
-    <svg width="300" height="300">
-        <ellipse cx="150" cy="150" rx="150" ry="150" style="fill:#00d9ff" />
-        <rect width="300" height="150" y="150" style="fill:#00d9ff" />
-        <polygon id="dm" points="50,140 100,100 200,100 250,140 150,250"
-            style="fill:lime;stroke:purple;stroke-width:5;" />
+    <svg width="450" height="300">
+        <ellipse cx="150" cy="150" rx="150" ry="150" fill="#00d9ff" />
+        <rect width="300" height="150" y="150" fill="#00d9ff" />
+        <polygon id="dm" points="50,140 100,100 200,100 250,140 150,250" fill="lime" stroke="purple" stroke-width="8" />
+        <circle id="k1" cx="400" cy="50" r="40" stroke="#000000" stroke-width="4" fill="#ff0000" />
+        <circle id="k2" cx="400" cy="150" r="40" stroke="#000000" stroke-width="4" fill="#ff0000" />
+        <circle id="k3" cx="400" cy="250" r="40" stroke="#000000" stroke-width="4" fill="#ff0000" />
     </svg>
 
     <script>
+        /*
+          Minify html f.eks. her (fjern kommentarer først):
+          https://www.willpeavy.com/tools/minifier/
+
+          Generer qr-kode f.eks. her:
+          https://www.the-qrcode-generator.com/
+
+          HTML Beautifier her (sæt til HTML):
+          https://beautifier.io/
+        */
+
         let dm = document.getElementById("dm");
         let ks = [];
-        let ts1 = [];
-        let ts2 = [];
-        let t1 = 0;
 
         function ck(k) {
             if (k == ks[k])
@@ -48,50 +53,70 @@
             let ss = true;
             let al = false;
 
-            t1++;
-            if (t1 > 1000)
-                t1 = 0;
+            let k1 = document.getElementById("k1");
+            let k2 = document.getElementById("k2");
+            let k3 = document.getElementById("k3");
 
-            for (i = 0; i < ts1.length; i++)
-                if (ts1[i] != ts2[i])
+            let c = 0;
+
+            /*
+              Nøgle 1:
+              Sæt ks[0] = 0 imens t1 er <= 500.
+            */
+            c = ck(0);
+            switch (c) {
+                case 10:
+                    k1.style.fill = "#00ff00";
+                    break;
+
+                case -5:
+                case 8:
                     al = true;
 
-            /*
-                Nøgle 1:
-                Sæt ks[0] = 0 imens t1 er <= 500.
-            */
-            if (ck(0) < 0)
-                ss = false;
-            else if (ts1[0] === undefined) {
-                ts1[0] = t1;
-                ts2[0] = t1;
+                default:
+                    ss = false;
+                    k1.style.fill = "#ff0000";
             }
-            if (ts1[0] > 500)
-                al = true;
 
             /*
-                Nøgle 2:
-                Sæt ks[-3] > -3, sæt ks[2] < 2
+              Nøgle 2:
+              Sæt ks[-3] = 0, sæt ks[2] = 0
             */
-            if (ck(ck(2)) != 5)
-                ss = false;
-            if (ck(ck(2)) == -6)
-                al = true;
-            if (ck(ck(2)) == 7)
-                al = true;
+            c = ck(ck(2));
+            switch (c) {
+                case 5:
+                    k2.style.fill = "#00ff00";
+                    break;
+
+                case -6:
+                case 7:
+                case 22:
+                case 20:
+                case 17:
+                case -8:
+                case 18:
+                case 9:
+                    al = true;
+
+                default:
+                    ss = false;
+                    k2.style.fill = "#ff0000";
+            }
             if (ks[10] < 10)
+            {
                 al = true;
+                ss = false;
+                k2.style.fill = "#ff0000";
+            }
 
             /*
-                Nøgle 3:
+              Nøgle 3:
             */
+            k3.style.fill = "#00ff00";
 
             /*
-                Nøgle 4:
-            */
-
-            /*
-                Nøgle 5:
+              Når nøglerne er løst sæt:
+              dm.style.visibility = "hidden"
             */
 
             if (!ss && vi !== "")
